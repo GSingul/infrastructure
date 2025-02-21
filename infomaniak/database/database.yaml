@@ -8,7 +8,7 @@ packages:
 
 runcmd:
   - sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
-  - wget -O /tmp/db.sql https://github.com/GSingul/infrastructure
+  - wget -O /tmp/db.sql https://raw.githubusercontent.com/GSingul/infrastructure/infomaniak/database/db.sql
   - mysql < /tmp/db.sql
   - systemctl restart mariadb
   - systemctl enable mariadb
