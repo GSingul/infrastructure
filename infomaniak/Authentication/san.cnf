@@ -1,0 +1,22 @@
+# Replace {CNIP},{DNS},{IP},{INTIP}
+
+[req]
+default_bits       = 2048
+default_keyfile    = privkey.pem
+distinguished_name = req_distinguished_name
+x509_extensions    = v3_req
+prompt             = no
+
+# You can define IP or domain name
+[req_distinguished_name]
+CN = {CNIP}
+
+[v3_req]
+subjectAltName = @alt_names
+
+# Add SAN
+# Use domain name if possible
+[alt_names]
+DNS.1 = {DNS}
+IP.1 = {IP}
+IP.2 = {INTIP}

@@ -1,0 +1,45 @@
+# cloud-init config file
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - openjdk-21-jdk
+  - wget
+  - unzip
+
+runcmd:
+  # Scarica Keycloak (sostituisci la versione con quella più recente)
+  - wget -O /tmp/keycloak.zip https://github.com/keycloak/keycloak/releases/download/26.1.2/keycloak-26.1.2.zip
+  - unzip /tmp/keycloak.zip -d /opt/
+  - mv /opt/keycloak-* /opt/keycloak
+
+  # Configura Keycloak per la modalità standalone (se usi un database esterno, sostituisci h2 con mariadb o postgres)
+  - /opt/keycloak/bin/kc.sh build
+
+  # Crea un utente amministratore
+  - echo "export KEYCLOAK_ADMIN=admin" >> /etc/environment
+  - echo "export KEYCLOAK_ADMIN_PASSWORD=admin" >> /etc/environment
+
+
+  # Abilita il servizio per l'avvio automatico
+  - echo "[Unit]
+    Description=Keycloak Server
+    After=network.target
+
+    [Service]
+    User=root
+    Environment=KEYCLOAK_ADMIN=admin
+    Environment=KEYCLOAK_ADMIN_PASSWORD=admin
+    ExecStart=/opt/keycloak/bin/kc.sh start
+    Restart=always
+
+    [Install]
+    WantedBy=multi-user.target" > /etc/systemd/system/keycloak.service
+
+  # Ricarica i servizi e avvia Keycloak
+  - systemctl daemon-reload
+  - systemctl enable keycloak
+  - systemctl start keycloak
+  
+final_message: "The system is finally up, after $UPTIME seconds"
