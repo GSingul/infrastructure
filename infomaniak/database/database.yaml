@@ -4,11 +4,13 @@ package_update: true
 
 packages:
   - mariadb-server
+  - python3-pymysql
   - wget
 
 runcmd:
-  - sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
-  - wget -O /tmp/db.sql https://raw.githubusercontent.com/GSingul/infrastructure/infomaniak/database/db.sql
+  - wget -O /tmp/99-openstack.cnf https://raw.githubusercontent.com/GSingul/infrastructure/refs/heads/master/infomaniak/database/99-openstack.cnf
+  - cp /tmp/99-openstack.cnf /etc/mysql/mariadb.conf.d/99-openstack.cnf
+  - wget -O /tmp/db.sql https://raw.githubusercontent.com/GSingul/infrastructure/refs/heads/master/infomaniak/database/db.sql
   - mysql < /tmp/db.sql
   - systemctl restart mariadb
   - systemctl enable mariadb
