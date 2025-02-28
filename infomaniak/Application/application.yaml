@@ -1,0 +1,17 @@
+# cloud-init config file
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - openjdk-21-jdk
+  - git
+  - maven
+
+runcmd (TODO):
+  - git clone https://github.com/GSingul/web-portal /opt/app
+  - cd /opt/app
+  - mvn clean package
+  - nohup java -jar target/*.jar > /opt/app/app.log 2>&1 &
+  
+final_message: "The system is finally up, after $UPTIME seconds"

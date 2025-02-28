@@ -1,0 +1,22 @@
+[ req ]
+default_bits       = 2048
+default_md         = sha256
+distinguished_name = req_distinguished_name
+req_extensions     = req_ext
+
+[ req_distinguished_name ]
+countryName                = CH
+stateOrProvinceName        = TI
+localityName               = Vezia
+organizationName           = GSingul
+commonName                 = gsingul.ch
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = gsingul.ch
+DNS.2 = www.gsingul.ch
+DNS.3 = gsingul.com
+DNS.4 = www.gsingul.com
+IP.1  = {IP}
