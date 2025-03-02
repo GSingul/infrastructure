@@ -76,4 +76,30 @@ Replace the {IP}
 `cp default /etc/nginx/sites-available/default `
 
 
+## System Service
+#### Environment file.
+Create or copy the web-portal.env file and fill the values
+
+`web-portal.env`
+
+#### JAR package
+Build the application from application folder
+
+`mvn clean package -DskipTests`
+
+Or just copy the Jar file in target folder
+
+#### The service
+Create or copy the web-portal.service file
+
+`/etc/systemd/system/web-portal.service`
+
+Reload daemon, enable if necessary and start or restart the service
+
+```
+sudo systemctl daemon-reload
+sudo systemctl enable web-portal
+sudo systemctl start web-portal
+```
+
 

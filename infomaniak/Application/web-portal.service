@@ -1,0 +1,17 @@
+[Unit]
+Description=G Singul Web Portal Service
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu
+EnvironmentFile=/home/ubuntu/web-portal.env
+ExecStart=/usr/bin/java -jar /home/ubuntu/web-portal/target/web-portal-0.0.1-SNAPSHOT.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/web-portal.log
+StandardError=append:/var/log/web-portal.log
+
+[Install]
+WantedBy=multi-user.target
