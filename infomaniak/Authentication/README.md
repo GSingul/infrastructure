@@ -68,4 +68,20 @@ To run Keycloak, just run
 `sudo /opt/keycloak/bin/kc.sh start --optimized &`
 
 
+## System Service
+
+#### The service
+Create or copy the keycloak.service file
+
+`/etc/systemd/system/keycloak.service`
+
+Reload daemon, enable if necessary and start or restart the service
+
+```
+sudo systemctl daemon-reload
+sudo systemctl enable keycloak
+sudo systemctl start keycloak
+```
+
+
 

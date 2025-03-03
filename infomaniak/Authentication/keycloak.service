@@ -1,0 +1,17 @@
+[Unit]
+Description=G Singul Auth Service
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu
+ExecStart=sudo /opt/keycloak/bin/kc.sh start --optimized
+Restart=always
+RestartSec=5
+TimeoutStartSec=60
+StandardOutput=append:/var/log/auth.log
+StandardError=append:/var/log/auth.log
+
+[Install]
+WantedBy=multi-user.target
