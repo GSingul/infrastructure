@@ -1,0 +1,45 @@
+## Installare il certificato del server keycloak.v2
+
+echo -n | openssl s_client -connect 37.156.43.106:8443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > server-cert.pem
+
+sudo keytool -import -trustcacerts -keystore /usr/lib/jvm/java-21-openjdk-amd64/lib/security/cacerts -storepass changeit -noprompt -alias keycloak -file server-cert.pem
+
+sudo keytool -importcert -trustcacerts -keystore /etc/ssl/certs/java/cacerts -storepass changeit -noprompt -alias keycloak -file server-cert.pem
+
+sudo keytool -delete -alias keycloak -keystore /etc/ssl/certs/java/cacerts -storepass changeit
+
+
+
+NOT WORKING:
+keytool -genkey -alias mycert -keyalg RSA -keystore keystore.p12 -storetype PKCS12 -keysize 2048
+
+
+openssl req -new -newkey rsa:2048 -nodes -keyout gsingulweb.key -out gsingulweb.csr -config san.cnf
+openssl x509 -req -in gsingulweb.csr -signkey gsingulweb.key -out gsingulweb.crt -days 365 -extensions v3_req -extfile san.cnf
+cat gsingulweb.key gsingulweb.crt > gsingulweb.pem
+
+
+
+# SSL from Baeldung PKCS12 (recommend)
+keytool -genkeypair -alias gsingul -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore gsingul.p12 -validity 3650
+gswebpass
+cp gsingul.p12 web-portal/src/main/resources/keystore/gsingul.p12
+
+
+# SSL from Baeldung JKS
+keytool -genkeypair -alias gsingul -keyalg RSA -keysize 2048 -keystore gsingul.jks -validity 3650
+keytool -importkeystore -srckeystore gsingul.jks -destkeystore gsingul.p12 -deststoretype pkcs12
+cp gsingul.p12 web-portal/src/main/resources/keystore/gsingul.p12
+
+
+# Per analizzare il problema ho installato
+sudo apt install python3-openstackclient
+
+
+#### Se vuoi un certificato ufficiale, puoi usare Let's Encrypt con Certbot per generarlo:
+sudo certbot certonly --manual --preferred-challenges dns -d tuodominio.com -d www.tuodominio.com --manual-public-ip-logging-ok
+
+
+
+
+

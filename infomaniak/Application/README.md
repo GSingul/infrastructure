@@ -102,4 +102,13 @@ sudo systemctl enable web-portal
 sudo systemctl start web-portal
 ```
 
+## Certificati per Keycloak
+Per accedere a keycloak in https va registrato nella JVM il certificato di Keycloak generato sul server di authentication.
+
+Recuperare il certificato e poi salvarlo nel keystore della JVM, attenzione ad usare un nuovo alia oppure rimuovere quello precedente!
+
+```
+echo | openssl s_client -connect 37.156.43.106:8443  2>/dev/null | openssl x509 > keycloak.crt
+sudo keytool -import -trustcacerts -keystore /usr/lib/jvm/java-21-openjdk-amd64/lib/security/cacerts -storepass changeit -noprompt -alias keycloakpsql -file keycloak.crt
+```
 
